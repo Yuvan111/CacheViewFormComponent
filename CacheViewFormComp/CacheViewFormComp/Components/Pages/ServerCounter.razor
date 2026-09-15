@@ -1,0 +1,17 @@
+<section class="test-panel" aria-labelledby="server-counter-heading">
+    <p class="panel-label">Interactive Server</p>
+    <h3 id="server-counter-heading">Server counter</h3>
+    <p id="server-count" class="counter-value" role="status">@count</p>
+    <button id="server-counter-button" class="btn btn-outline-dark" type="button" @onclick="Increment">
+        Increment server counter
+    </button>
+</section>
+
+@code {
+    private int count;
+
+    private void Increment()
+    {
+        count++;
+    }
+}

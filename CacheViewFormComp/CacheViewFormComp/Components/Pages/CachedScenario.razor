@@ -1,0 +1,71 @@
+@using System.ComponentModel.DataAnnotations
+@using CacheViewFormComp.Client.Pages
+
+<section class="scenario" aria-labelledby="scenario-heading">
+    <header class="scenario-header">
+        <div>
+            <p class="eyebrow">Cached section</p>
+            <h2 id="scenario-heading">Request-bound content</h2>
+        </div>
+        <dl class="cache-evidence">
+            <div>
+                <dt>Initialization ID</dt>
+                <dd id="initialization-id">@InitializationId</dd>
+            </div>
+            <div>
+                <dt>Created (UTC)</dt>
+                <dd id="created-at">@CreatedAt.ToString("HH:mm:ss")</dd>
+            </div>
+        </dl>
+    </header>
+
+    <div class="scenario-grid">
+        <section class="test-panel" aria-labelledby="form-heading">
+            <p class="panel-label">Static SSR</p>
+            <h3 id="form-heading">Form post</h3>
+
+            <EditForm Model="Input" FormName="cached-form" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="field">
+                    <label for="name">Name</label>
+                    <InputText id="name" class="form-control" @bind-Value="Input!.Name" />
+                    <ValidationMessage For="() => Input!.Name" />
+                </div>
+                <button class="btn btn-dark" type="submit">Submit</button>
+            </EditForm>
+
+            @if (AcceptedValue is not null)
+            {
+                <p id="accepted-value" class="result" role="status">Accepted: <strong>@AcceptedValue</strong></p>
+            }
+        </section>
+
+        <ServerCounter @rendermode="InteractiveServer" />
+        <WasmCounter @rendermode="InteractiveWebAssembly" />
+    </div>
+</section>
+
+@code {
+    [SupplyParameterFromForm]
+    private FormInput? Input { get; set; }
+
+    private Guid InitializationId { get; } = Guid.NewGuid();
+    private DateTimeOffset CreatedAt { get; } = DateTimeOffset.UtcNow;
+    private string? AcceptedValue { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Input ??= new();
+    }
+
+    private void HandleValidSubmit()
+    {
+        AcceptedValue = Input!.Name;
+    }
+
+    private sealed class FormInput
+    {
+        [Required(ErrorMessage = "Name is required.")]
+        public string? Name { get; set; }
+    }
+}

@@ -1,0 +1,17 @@
+<section class="test-panel" aria-labelledby="wasm-counter-heading">
+    <p class="panel-label">Interactive WebAssembly</p>
+    <h3 id="wasm-counter-heading">WebAssembly counter</h3>
+    <p id="wasm-count" class="counter-value" role="status">@count</p>
+    <button id="wasm-counter-button" class="btn btn-outline-dark" type="button" @onclick="Increment">
+        Increment WebAssembly counter
+    </button>
+</section>
+
+@code {
+    private int count;
+
+    private void Increment()
+    {
+        count++;
+    }
+}
