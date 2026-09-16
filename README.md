@@ -51,7 +51,7 @@ One `CacheView` contains a cacheable child that provides:
 
 Both interactive children use the default prerendering behavior. The server project registers Interactive Server and Interactive WebAssembly, while the client project contains the WebAssembly component.
 
-The cache entry uses a two-minute absolute expiration. This allows a cold/warm comparison before deliberately testing expiration.
+The cache entry uses a one-minute absolute expiration. Complete the cold/warm comparison before deliberately testing expiration.
 
 ## Test procedure
 
@@ -70,7 +70,7 @@ Each `prerenderId` can appear twice because it identifies the start and end mark
 
 ### 2. Capture a warm request
 
-1. Reload the page before the two-minute expiration.
+1. Reload the page before the one-minute expiration.
 2. Wait until both interactive children are ready.
 3. Record the same values captured for the cold request.
 4. Confirm that:
@@ -99,11 +99,11 @@ A cold WebAssembly visit can require a runtime download. Record when each compon
 ### 5. Test expiration and recreation
 
 1. Record the current initialization `Guid` and creation time.
-2. Leave the page open for longer than two minutes from the displayed creation time.
+2. Leave the page open for at least one minute and 15 seconds from the displayed creation time.
 3. Reload and confirm that a new initialization `Guid` and creation time appear.
 4. Submit valid and empty form values again.
 5. Click both counters several times.
-6. Reload the recreated entry several times before it expires and repeat the form and counter checks.
+6. Reload the recreated entry several times within one minute and repeat the form and counter checks.
 
 All submissions and clicks should continue to work after expiration and on subsequent warm reloads.
 
